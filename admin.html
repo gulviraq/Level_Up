@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DoubleSmart Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="authGate" class="auth-gate" hidden>
+    <form class="auth-card" id="loginForm">
+      <div class="brand-mark">DS</div>
+      <p class="eyebrow">DoubleSmart workspace</p>
+      <h1>Вход в админку</h1>
+      <p class="muted">Доступ только для пользователей с ролью Admin.</p>
+      <label>Email<input id="loginEmail" type="email" value="admin@doublesmart.local" required></label>
+      <label>Пароль<input id="loginPassword" type="password" value="admin123" required></label>
+      <button class="primary-button" type="submit">Войти как администратор</button>
+      <p class="demo-note">Demo-доступ: admin@doublesmart.local / admin123</p>
+    </form>
+  </div>
+
+  <div class="admin-shell" id="adminShell" hidden>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <a class="brand" href="index.html"><span class="brand-mark">DS</span><span><b>DoubleSmart</b><small>Admin workspace</small></span></a>
+        <button class="icon-button mobile-only" id="closeSidebar" aria-label="Закрыть меню">×</button>
+      </div>
+      <nav class="side-nav" aria-label="Административная навигация">
+        <p class="nav-caption">Рабочая область</p>
+        <a href="#dashboard" data-route="dashboard"><span>⌂</span> Дашборд</a>
+        <a href="#catalog" data-route="catalog"><span>▦</span> Каталог</a>
+        <a href="#users" data-route="users"><span>◎</span> Пользователи</a>
+        <a href="#orders" data-route="orders"><span>▤</span> Заказы</a>
+        <a href="#reviews" data-route="reviews"><span>★</span> Модерация отзывов</a>
+        <p class="nav-caption">Система</p>
+        <a href="#settings" data-route="settings"><span>⚙</span> Настройки</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="security-state"><span></span> Сессия защищена</div>
+        <button class="logout-button" id="logoutButton">Выйти из аккаунта</button>
+      </div>
+    </aside>
+
+    <div class="content-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-only" id="openSidebar" aria-label="Открыть меню">☰</button>
+        <div class="topbar-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Поиск по рабочей области" aria-label="Поиск"></div>
+        <div class="topbar-actions">
+          <div class="role-switcher admin-role-switcher"><a class="role-option" href="index.html" data-action="switch-user">Пользователь</a><span class="role-option active">Админ</span></div>
+          <div class="theme-switcher" aria-label="Тема" role="group">
+            <button data-theme="light" title="Светлая">☀</button><button data-theme="dark" title="Тёмная">◐</button><button data-theme="oled" title="OLED">●</button>
+          </div>
+          <div class="admin-profile"><span class="avatar">AK</span><span><b>Алексей К.</b><small>Administrator</small></span></div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="view" data-view="dashboard">
+          <div class="page-heading"><div><p class="eyebrow">Обзор платформы</p><h1>Добрый день, Алексей</h1><p class="muted">Вот что происходит в DoubleSmart сегодня.</p></div><button class="secondary-button" data-action="refresh">↻ Обновить данные</button></div>
+          <div class="metric-grid" id="metrics"></div>
+          <div class="dashboard-grid">
+            <section class="panel chart-panel"><div class="panel-heading"><div><h2>Выручка</h2><p class="muted">Последние 7 дней</p></div><strong id="revenueTotal">0 ₸</strong></div><div class="bars" id="revenueChart"></div></section>
+            <section class="panel"><div class="panel-heading"><div><h2>Последние события</h2><p class="muted">Журнал активности</p></div><a href="#users">Все события</a></div><div class="activity-list" id="activityList"></div></section>
+          </div>
+        </section>
+
+        <section class="view" data-view="catalog" hidden>
+          <div class="page-heading"><div><p class="eyebrow">Контент и ассортимент</p><h1>Каталог</h1><p class="muted">Управляйте товарами, ценами и видимостью в магазине.</p></div><button class="primary-button" data-action="new-product" id="new-product-button" type="button">＋ Новый товар</button></div>
+          <section class="panel table-panel"><div class="toolbar"><div class="table-search"><span>⌕</span><input id="productSearch" type="search" placeholder="Название или категория"></div><select id="categoryFilter"><option value="all">Все категории</option><option value="smart">Smart Home</option><option value="kitchen">Кухня</option><option value="cleaning">Уборка</option></select><select id="visibilityFilter"><option value="all">Любой статус</option><option value="active">Активные</option><option value="hidden">Скрытые</option></select></div><div class="table-scroll"><table><thead><tr><th>Товар</th><th>Категория</th><th>Цена</th><th>Статус</th><th>Обновлён</th><th></th></tr></thead><tbody id="productsTable"></tbody></table></div><div class="pagination" id="productPagination"></div></section>
+        </section>
+
+        <section class="view" data-view="users" hidden>
+          <div class="page-heading"><div><p class="eyebrow">Доступ и профили</p><h1>Пользователи</h1><p class="muted">Роли, статусы и история действий аккаунтов.</p></div><button class="secondary-button" data-action="export-users">⇩ Экспорт</button></div>
+          <section class="panel table-panel"><div class="toolbar"><div class="table-search"><span>⌕</span><input id="userSearch" type="search" placeholder="Имя, ник или email"></div><select id="userStatusFilter"><option value="all">Все статусы</option><option value="active">Активные</option><option value="blocked">Заблокированные</option></select></div><div class="table-scroll"><table><thead><tr><th>Пользователь</th><th>Email</th><th>Регистрация</th><th>Роль</th><th>Статус</th><th></th></tr></thead><tbody id="usersTable"></tbody></table></div></section>
+        </section>
+
+        <section class="view" data-view="orders" hidden>
+          <div class="page-heading"><div><p class="eyebrow">Продажи и заявки</p><h1>Заказы</h1><p class="muted">Контролируйте оплату, доставку и клиентские данные.</p></div><select class="date-select" id="orderStatusFilter"><option value="all">Все статусы</option><option value="new">Новые</option><option value="processing">В обработке</option><option value="completed">Завершены</option><option value="cancelled">Отменены</option></select></div>
+          <section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Заказ</th><th>Клиент</th><th>Состав</th><th>Сумма</th><th>Статус</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div></section>
+        </section>
+
+        <section class="view" data-view="reviews" hidden>
+          <div class="page-heading"><div><p class="eyebrow">Контроль качества</p><h1>Модерация отзывов</h1><p class="muted">Проверяйте verified-покупки и скрывайте спам. Создание отзывов из админки недоступно.</p></div><select class="date-select" id="reviewStatusFilter"><option value="all">Все статусы</option><option value="pending">На проверке</option><option value="approved">Опубликованы</option><option value="hidden">Скрыты</option></select></div>
+          <section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Автор</th><th>Товар</th><th>Оценка</th><th>Покупка</th><th>Статус</th><th></th></tr></thead><tbody id="reviewsTable"></tbody></table></div></section>
+        </section>
+
+        <section class="view" data-view="settings" hidden>
+          <div class="page-heading"><div><p class="eyebrow">Конфигурация</p><h1>Настройки</h1><p class="muted">Параметры рабочей области и политика доступа.</p></div></div>
+          <div class="settings-grid"><section class="panel settings-card"><h2>Профиль администратора</h2><label>Имя<input value="Алексей Ковалёв"></label><label>Email<input value="admin@doublesmart.local"></label><button class="primary-button" data-action="save-settings">Сохранить изменения</button></section><section class="panel settings-card"><h2>RBAC и безопасность</h2><div class="permission-row"><span><b>Admin</b><small>Полный доступ к каталогу, пользователям и заказам</small></span><span class="status-pill active">Включено</span></div><div class="permission-row"><span><b>User</b><small>Только клиентская часть и собственные заказы</small></span><span class="status-pill active">Включено</span></div><div class="security-callout">API должен проверять токен сессии и роль на сервере для каждого `/admin/*` запроса.</div></section></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="productModal" hidden><form class="modal" id="productForm"><button type="button" class="modal-close" data-action="close-modal">×</button><p class="eyebrow" id="productModalEyebrow">Новый объект</p><h2 id="productModalTitle">Добавить товар</h2><input id="productId" type="hidden"><div class="form-grid"><label>Название<input id="productName" required></label><label>Категория<select id="productCategory" required><option value="smart">Smart Home</option><option value="kitchen">Кухня</option><option value="cleaning">Уборка</option></select></label><label>Цена, ₸<input id="productPrice" type="number" min="0" required></label><label>Старая цена, ₸<input id="productOldPrice" type="number" min="0"></label><label class="full">URL изображения<input id="productImage" type="url" placeholder="https://..."></label><label class="full">Описание<textarea id="productDescription" rows="4"></textarea></label><label>Тег<input id="productBadge" placeholder="HIT, NEW..."></label><label>Статус<select id="productVisibility"><option value="active">Активен</option><option value="hidden">Скрыт</option></select></label></div><div class="modal-actions"><button type="button" class="secondary-button" data-action="close-modal">Отмена</button><button type="submit" class="primary-button">Сохранить товар</button></div></form></div>
+  <div class="modal-backdrop" id="confirmModal" hidden><div class="modal confirm-modal"><button class="modal-close" data-action="close-modal">×</button><p class="eyebrow">Подтверждение</p><h2 id="confirmTitle">Удалить запись?</h2><p class="muted" id="confirmText">Это действие нельзя отменить.</p><div class="modal-actions"><button class="secondary-button" data-action="close-modal">Отмена</button><button class="danger-button" id="confirmButton">Удалить</button></div></div></div>
+  <div class="toast" id="toast"></div>
+  <script src="database.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
